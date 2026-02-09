@@ -8,19 +8,17 @@
 </head>
 <body>
         <div class="actions-grid">
-            <a href="{{route('staff.index')}}" class="action-card">
-                <i class="fas fa-users action-icon"></i>
-
-                    <h3>Liste des Utilisateurs Enregistrés</h3>
+            <a href="{{route('services.index')}}" class="action-card">
+                <i class="fas fa-cogs action-icon"></i>
+                <h3>Liste des Services</h3>
             </a>
-            <a href="{{route('staff.create')}}" class="action-card">
-            <i class="fas fa-user-plus action-icon"></i>
-
-                <h3>Ajouter un utilisateur</h3>
+            <a href="{{route('services.create')}}" class="action-card">
+                <i class="fas fa-plus-circle action-icon"></i>
+                <h3>Ajouter un Service</h3>
             </a>
             <a href="#" class="action-card">
                 <i class="fas fa-chart-line action-icon"></i>
-            <h3>Statistiques d'utilisation</h3>
+                <h3>Statistiques des Services</h3>
             </a>
         </div>
 </body>

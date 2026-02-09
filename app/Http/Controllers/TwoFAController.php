@@ -47,9 +47,16 @@ class TwoFAController extends Controller
         ]);
 
         $twoFaData = Session::get('2fa_code');
+        
+        if (!$twoFaData) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Session expirée. Veuillez recommencer.'
+            ]);
+        }
 
         // Vérification simplifiée pour le test
-        if ($request->code === $twoFaData['code']) {
+        if ((string)$request->code === (string)$twoFaData['code']) {
             // Authentification réussie
             Session::put('verified', true);
             Session::forget('2fa_code');

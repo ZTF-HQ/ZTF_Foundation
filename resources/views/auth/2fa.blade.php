@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>ZTF Foundation - Authentification 2FA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -12,8 +13,8 @@
 <body>
     <div class="container">
         <h1 class="auth-title">
-            Authentification Ã  Deux Facteurs
-            <span>SÃ©curisez votre connexion</span>
+            Authentification A  Deux Facteurs
+            <span>Securisez votre connexion</span>
         </h1>
         <div class="steps">
             <div class="step active" data-step="1">1</div>
@@ -53,7 +54,7 @@
             <form id="verificationForm" action="{{ route('verifyCode') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="code">Code de vÃ©rification</label>
+                    <label for="code">Code de verification</label>
                     <input type="text" id="code" name="code" class="form-input" 
                            required pattern="\d{12}" maxlength="12"
                            placeholder="000000000000">
@@ -66,7 +67,7 @@
                 </div>
                 <button type="submit" class="btn">
                     <i class="fas fa-shield-alt"></i>
-                    VÃ©rifier
+                    Verifier
                 </button>
             </form>
         </div>
@@ -75,7 +76,7 @@
         <div class="form-stage" id="stage3">
             <div class="success-message">
                 <i class="fas fa-check-circle"></i>
-                <p>Authentification rÃ©ussie!</p>
+                <p>Authentification reussie!</p>
                 <p>Redirection en cours...</p>
             </div>
         </div>

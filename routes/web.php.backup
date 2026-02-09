@@ -91,40 +91,20 @@ Route::middleware('auth')->group(function () {
     ]);
 
     //============================================
-    // ROUTES DE GESTION DES STATISTIQUES
+    // ROUTES DES DÉPARTEMENTS
     //============================================
 
     Route::get('/departments/statistics', [SuperAdminController::class, 'departmentStatistics'])
         ->name('departments.statistics');
-
-    //============================================
-    // ROUTES D'AFFECTATION DES CHEFS DE DÉPARTEMENT
-    //============================================
-
-    // Route pour afficher la liste des départements pour sélection
-    Route::get('/departments/select-for-head-assignment', [DepartmentHeadController::class, 'selectDepartment'])->name('departments.assign.head.form');
 
     Route::group(['prefix' => 'departments/{department}'], function () {
         Route::get('/assign-head', [DepartmentHeadController::class, 'showAssignForm'])->name('departments.head.assign.form');
         Route::post('/assign-head', [DepartmentHeadController::class, 'assign'])->name('departments.head.assign');
         Route::delete('/remove-head', [DepartmentHeadController::class, 'remove'])->name('departments.head.remove');
     });
-
-    //============================================
-    // ROUTES D'INDEX ET TABLEAUX DE BORD DÉPARTEMENTS
-    //============================================
-
-    Route::get('/departments/choose', function(){
-        return view('departments.choose');
-    })->name('departments.choose');
     
     Route::get('/departments/indexDepts',[DepartmentController::class,'indexDepts'])->name('indexDepts');
     Route::get('/departments/dashboard',[DepartmentController::class,'dashboard'])->name('departments.dashboard');
-
-    //============================================
-    // ROUTES DE GESTION DU PERSONNEL DÉPARTEMENT
-    //============================================
-
     Route::get('/departments/staff', [DepartmentController::class, 'staffIndex'])->name('departments.staff.index');
     Route::get('/departments/staff/create', [DepartmentController::class, 'staffCreate'])->name('departments.staff.create');
     Route::post('/departments/staff', [DepartmentController::class, 'staffStore'])->name('departments.staff.store');
@@ -133,10 +113,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/departments/staff/{staff}', [DepartmentController::class, 'staffUpdate'])->name('staff.update');
     Route::delete('/departments/staff/{staff}', [DepartmentController::class, 'staffDestroy'])->name('staff.destroy');
 
-    //============================================
-    // ROUTES DE PARAMÈTRES DE DÉPARTEMENT
-    //============================================
-
+    // Routes pour les paramètres du département
     Route::prefix('departments/settings')->name('departments.update.')->group(function () {
         Route::post('/general', [DepartmentController::class, 'updateSettings'])->name('settings');
         Route::post('/notifications', [DepartmentController::class, 'updateNotifications'])->name('notifications');
@@ -144,19 +121,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/appearance', [DepartmentController::class, 'updateAppearance'])->name('appearance');
     });
 
-    //============================================
-    // ROUTES DE TÉLÉCHARGEMENT PDF DÉPARTEMENT
-    //============================================
-
+    // Routes pour les PDF des départements
     Route::prefix('departments')->name('departments.pdf.')->group(function () {
         Route::get('/pdf/generate', [DepartmentPdfController::class, 'generatePDF'])->name('generate');
         Route::get('/pdf/history', [DepartmentPdfController::class, 'getPdfHistory'])->name('history');
     });
 
-    //============================================
-    // ROUTES DE SERVICES DÉPARTEMENT
-    //============================================
-
+    // Routes pour la gestion des services du département
     Route::prefix('departments/{department}/services')->name('departments.services.')->group(function () {
         Route::get('/', [App\Http\Controllers\Department\ServiceController::class, 'index'])->name('index');
         Route::get('/create', [App\Http\Controllers\Department\ServiceController::class, 'create'])->name('create');
@@ -166,20 +137,14 @@ Route::middleware('auth')->group(function () {
         Route::put('/{service}', [App\Http\Controllers\Department\ServiceController::class, 'update'])->name('update');
         Route::delete('/{service}', [App\Http\Controllers\Department\ServiceController::class, 'destroy'])->name('destroy');
         
-        //============================================
-        // ROUTES DE GESTION UTILISATEURS SERVICES
-        //============================================
-
+        // Routes pour la gestion des utilisateurs des services
         Route::get('/{service}/unassigned-users', [App\Http\Controllers\Department\ServiceUserController::class, 'getUnassignedUsers'])
             ->name('unassigned-users');
         Route::post('/{service}/assign-users', [App\Http\Controllers\Department\ServiceUserController::class, 'assignUsers'])
             ->name('assign-users');
     });
 
-    //============================================
-    // ROUTES RESSOURCE DÉPARTEMENTS
-    //============================================
-
+    // Resource routes pour les départements
     Route::resource('departments', DepartmentController::class)->names([
         'index' => 'departments.index',
         'create' => 'departments.create',
@@ -188,23 +153,17 @@ Route::middleware('auth')->group(function () {
         'edit' => 'departments.edit',
         'update' => 'departments.update',
         'destroy' => 'departments.destroy',
-    ]);
+    ]); // Exclure la route show pour éviter les conflits
 
-    //============================================
-    // ROUTES DU COMITÉ - TÉLÉCHARGEMENT PDF
-    //============================================
-
+    // Routes pour le comité
     Route::prefix('committee')->name('committee.')->group(function () {
+        // Routes des PDFs
         Route::get('/pdf/departments-heads', [CommitteePdfController::class, 'generateDepartmentsHeadsList'])
             ->name('pdf.departments-heads');
         Route::get('/pdf/departments-heads-services', [CommitteePdfController::class, 'generateDepartmentsHeadsServicesList'])
             ->name('pdf.departments-heads-services');
         Route::get('/pdf/departments-employees', [CommitteePdfController::class, 'generateDepartmentsEmployeesList'])
             ->name('pdf.departments-employees');
-
-        //============================================
-        // ROUTES DU COMITÉ - SERVICES
-        //============================================
 
         // Routes pour les services
         Route::prefix('services')->name('services.')->group(function() {
@@ -221,23 +180,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/services', [ServiceListController::class, 'index'])
             ->name('services.index');
 
-        //============================================
-        // ROUTES DU COMITÉ - AFFECTATIONS
-        //============================================
-
+        // Routes pour les affectations d'utilisateurs aux départements
         Route::prefix('assignments')->name('assignments.')->group(function() {
             Route::get('/', [ManageUsersController::class, 'indexUnAssigned'])->name('index');
             Route::get('/user/{userId}', [ManageUsersController::class, 'assignForm'])->name('form');
             Route::post('/user/{userId}', [ManageUsersController::class, 'assignUserToDepartment'])->name('store');
         });
 
-        //============================================
-        // ROUTES DU COMITÉ - GESTION ET RESSOURCE
-        //============================================
-
-        Route::get('/departments/manage', [ComiteController::class, 'manage'])
-            ->name('departments.manage');
-        
+Route::get('/committee/departments/manage', [ComiteController::class, 'manage'])
+    ->name('committee.departments.manage');
+        // Routes principales du comité
         Route::resource('/', ComiteController::class)->names([
             'index' => 'index',
             'create' => 'create',
@@ -247,25 +199,18 @@ Route::middleware('auth')->group(function () {
             'update' => 'update',
             'destroy' => 'destroy',
             'serviceIndex'=> 'services.index'
+            
         ]);
 
-        Route::get('/services/create',function () {
+        Route::get('/committee/services/create',function () {
             return view('committee.services.create');
-        })->name('services.create');
+        })->name('committee.services.create');
+
 
     });
-
-    //============================================
-    // ROUTES D'AUTHENTIFICATION - AUTRES
-    //============================================
-
     Route::post('/auth/login',[LoginController::class,'login'])->name('staff.store');
     Route::post('departments/Save-Depts',[LoginController::class,'saveDepts'])->name('departments.saveDepts');
-
-    //============================================
-    // ROUTES DE SERVICES (AVEC CONTRÔLE D'ACCÈS)
-    //============================================
-
+    // Toutes les routes de service avec les middlewares d'authentification et de contrôle d'accès par département
     Route::middleware(['auth', \App\Http\Middleware\CheckDepartmentAccess::class])->group(function () {
         Route::resource('services', ServiceController::class)->names([
             'index' => 'services.index',
@@ -277,10 +222,7 @@ Route::middleware('auth')->group(function () {
             'destroy' => 'services.destroy',
         ]);
         
-        //============================================
-        // ROUTES DE STAFF (AVEC CONTRÔLE D'ACCÈS)
-        //============================================
-
+        // Routes du staff avec contrôle d'accès par département
         Route::prefix('staff')->name('staff.')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
             Route::get('/create', [UserController::class, 'create'])->name('create');
@@ -291,30 +233,23 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
         });
     });
-
-    //============================================
-    // ROUTES SUPER ADMIN - DASHBOARD
-    //============================================
-
     Route::get('/superAdmin/dashboard',[SuperAdminController::class,'dashboard'])->name('dashboard');
 
-    //============================================
-    // ROUTES DE PARAMÈTRES (SETTINGS)
-    //============================================
-
+    // Routes pour les paramètres (Settings)
     Route::middleware(['auth', \App\Http\Middleware\CheckSuperAdmin::class])->group(function () {
+        // Paramètres du site
         Route::put('/settings/site', [SettingsController::class, 'updateSiteSettings'])
             ->name('settings.site.update');
         
+        // Paramètres de sécurité
         Route::put('/settings/security', [SettingsController::class, 'updateSecuritySettings'])
             ->name('settings.security.update');
         
+        // Paramètres de notification
         Route::put('/settings/notifications', [SettingsController::class, 'updateNotificationSettings'])
             ->name('settings.notifications.update');
         
-        //============================================
-        // ROUTES DE MAINTENANCE
-        //============================================
+        // Actions de maintenance
         Route::post('/settings/backup', [SettingsController::class, 'createBackup'])
             ->name('settings.backup.create');
         Route::post('/settings/cache/clear', [SettingsController::class, 'clearCache'])
@@ -322,54 +257,40 @@ Route::middleware('auth')->group(function () {
         Route::post('/settings/maintenance', [SettingsController::class, 'toggleMaintenance'])
             ->name('settings.maintenance.toggle');
     });
-
-    //============================================
-    // ROUTES D'AUTHENTIFICATION - 2FA
-    //============================================
     
     Route::get('/auth/2fa',function(){
         return view('auth.2fa');
-    })->name('twoFactorAuth');
+        })->name('twoFactorAuth');
     Route::post('auth/2fa-send',[TwoFAController::class,'sendCode'])->name('sendCode');
-    Route::post('/auth/2fa-verify',[TwoFAController::class,'verifyCode'])->name('verifyCode');
+    Route::post('/ath/2fa-verify',[TwoFAController::class,'verifyCode'])->name('verifyCode');
 
 });
 
-//============================================
-// ROUTES D'AFFECTATION DE DÉPARTEMENT
-//============================================
+Route::get('/staff/create',[UserController::class,'create'])->name('staff.create');
 
+// Afficher le formulaire pour un département
 Route::get('/departments/{department}/assign', [SuperAdminController::class, 'assign'])
     ->middleware('auth')
     ->name('departments.assign');
 
+// Soumettre le formulaire pour assigner les utilisateurs
 Route::put('/departments/{department}/assign-users', [SuperAdminController::class, 'assignUsers'])
     ->middleware('auth')
     ->name('departments.assignUsers');
 
-//============================================
-// ROUTES DE STATISTIQUES
-//============================================
+
+
+
 
 Route::get('/staff/statistiques', [App\Http\Controllers\StatistiqueController::class, 'index'])
     ->middleware('auth')->name('statistiques');
 Route::get('/api/statistics', [App\Http\Controllers\StatistiqueController::class, 'apiStats'])
     ->middleware('auth');
-Route::get('/staff/statistiques', [App\Http\Controllers\StatistiqueController::class, 'index'])
-    ->middleware('auth')->name('statistiques');
-Route::get('/api/statistics', [App\Http\Controllers\StatistiqueController::class, 'apiStats'])
-    ->middleware('auth');
 
-//============================================
-// ROUTES D'AUTHENTIFICATION - GUEST (PUBLIC)
-//============================================
-
+// Authentication Routes
 Route::middleware('guest')->group(function () {
 
-    //============================================
-    // ROUTES DE RÉINITIALISATION DE MOT DE PASSE
-    //============================================
-
+    // Routes pour la réinitialisation du mot de passe
     Route::get('forgot-password', [App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])
         ->name('password.request');
     Route::post('forgot-password', [App\Http\Controllers\Auth\PasswordResetLinkController::class, 'store'])
@@ -379,10 +300,7 @@ Route::middleware('guest')->group(function () {
     Route::post('reset-password', [App\Http\Controllers\Auth\NewPasswordController::class, 'store'])
         ->name('password.update');
     
-    //============================================
-    // ROUTES D'IDENTIFICATION/VÉRIFICATION
-    //============================================
-
+    // Routes pour la vérification d'identite
     Route::get('/identification/form', [FirstRegistrationController::class, 'showRegistrationForm'])
         ->name('identification.form');
     Route::post('/identification/form',[FirstRegistrationController::class,'register'])->name('identification.register');
@@ -397,25 +315,18 @@ Route::middleware('guest')->group(function () {
 });
 
 //============================================
-//============================================
 // ROUTES POUR LE FORMULAIRE HQ STAFF
 //============================================
 
 // Affichage du formulaire
 Route::get('/formulaire/create',[HqStaffFormController::class,'showBigForm'])->name('BigForm');
 
-//==================================================
-// ROUTES POUR TÉLÉCHARGEMENT DE  FORMULAIRE EN PDF
-//==================================================
-
+// Téléchargement de PDF
 Route::post('/download-pdf', [HqStaffFormController::class, 'telechargerPDF'])->name('download.pdf');
 Route::get('/user/{id}/download-pdf', [HqStaffFormController::class, 'downloadUserPDF'])->name('user.download.pdf');
 Route::get('/user/{userId}/download-staff-pdf', [HqStaffFormController::class, 'downloadUserStaffPDF'])->name('user.download.staff.pdf');
 
-//============================================
-// ROUTES POUR HISTORIQUE ET APPROBATION DE PDF
-//============================================
-
+// Historique et Approbation des PDFs
 Route::get('/pdf-download-history', [HqStaffFormController::class, 'downloadHistory'])->name('pdf.download.history');
 Route::get('/pdf-download/{historyId}', [HqStaffFormController::class, 'redownloadPDF'])->name('redownload.pdf');
 Route::get('/pdf-pending-approvals', [HqStaffFormController::class, 'pendingApprovals'])->name('pdf.pending.approvals');
@@ -423,66 +334,61 @@ Route::post('/pdf-link/{staffUserId}/approve', [HqStaffFormController::class, 'a
 Route::post('/pdf-link/{staffUserId}/reject', [HqStaffFormController::class, 'rejectPDFLink'])->name('pdf.link.reject');
 
 //============================================
-// ROUTES D'AUTHENTIFICATION - LOGOUT
+// ROUTES POUR LA GESTION DES UTILISATEURS
 //============================================
+
+Route::delete('/user/{id}/delete', [UserController::class, 'deleteUser'])->name('user.delete');
 
 Route::middleware('auth')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])
         ->name('logout');
     
-    //============================================
-    // ROUTES D'INSCRIPTION COMPLÈTE
-    //============================================
-
+    // Routes pour le formulaire complet d'inscription
     Route::get('/complete-registration', [UserController::class, 'create'])->name('registration.create');
     Route::post('/complete-registration', [UserController::class, 'store'])->name('registration.store');
     Route::post('/auth/register', [UserController::class, 'finalRegister'])->name('auth.register.submit');
 
-    //============================================
-    // ROUTES DE GESTION DU PROFIL
-    //============================================
-
+    // Routes du profil
     Route::get('/profile/show', [UserProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [UserProfileController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/password', [UserProfileController::class, 'updatePassword'])->name('profile.password.update');
     Route::post('/profile/delete',[UserProfileController::class,'destroy'])->name('profile.destroy');
+// Routes for other pages, all with unique names
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
 
-    //============================================
-    // ROUTES DES PAGES PUBLIQUES (AUTHENTICATED)
-    //============================================
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
 
-    Route::get('/about', function () {
-        return view('about');
-    })->name('about');
-
-    Route::get('/contact', function () {
-        return view('contact');
-    })->name('contact');
-
-    Route::get('/blog', function () {
-        return view('blog');
-    })->name('blog');
+Route::get('/blog', function () {
+    return view('blog');
+})->name('blog');
 
 });
 
-//============================================
-// ROUTES DES PAGES D'ACCUEIL (PUBLIC)
-//============================================
 
 Route::get('/home',function(){
     return view('home');
 })->name('home');
 
+// The route for your home page, with a name
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-//============================================
-// ROUTES DE VÉRIFICATION DE STATUT
-//============================================
+
 
 Route::get('/check-registration-status', [App\Http\Controllers\Auth\UserStatusController::class, 'checkRegistrationStatus'])
     ->name('check.registration.status');
 
+/*Route::middleware(['auth'])->group(function () {
+    Route::get('/department-statistics', [SuperAdminController::class, 'departmentStatistics'])->name('departments.statistics');
+    // Super Admin Routes
+    Route::group(['middleware' => ['superadmin'], 'prefix' => 'superadmin', 'as' => 'superadmin.'], function () {
+        Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
+});
+});*/
 

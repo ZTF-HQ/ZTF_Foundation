@@ -5,8 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HQ Staff Registration - ZTF Foundation</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{asset('create.css')}}">
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 
@@ -77,13 +80,13 @@
                 <input type="date" name="conversionDate" placeholder="Date of Conversion" class="input" required>
                 <div class="radio-group flex items-center col-span-2">
                     <p class="mr-4">Baptism by immersion:</p>
-                    <label><input type="radio" name="baptismByImmersion" value="Yes" required> Yes</label>
-                    <label><input type="radio" name="baptismByImmersion" value="No" required> No</label>
+                    <label><input type="radio" name="baptismByImmersion" value="Yes"> Yes</label>
+                    <label><input type="radio" name="baptismByImmersion" value="No"> No</label>
                 </div>
                 <div class="radio-group flex items-center col-span-2">
                     <p class="mr-4">Baptism in the Holy Spirit:</p>
-                    <label><input type="radio" name="baptismInHolySpirit" value="Yes" required> Yes</label>
-                    <label><input type="radio" name="baptismInHolySpirit" value="No" required> No</label>
+                    <label><input type="radio" name="baptismInHolySpirit" value="Yes"> Yes</label>
+                    <label><input type="radio" name="baptismInHolySpirit" value="No"> No</label>
                 </div>
                 <input type="text" name="homeChurch" placeholder="Your Home Church" class="input" required>
                 <input type="text" name="center" placeholder="Your Center" class="input" required>
@@ -100,7 +103,7 @@
         <div class="form-step">
             <h2 class="form-section-title">4. Family Life</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <select name="maritalStatus" class="input" required>
+                <select name="maritalStatus" class="input">
                     <option value="">Marital Status</option>
                     <option value="Married">Married</option>
                     <option value="Single">Single</option>
@@ -138,14 +141,14 @@
                 <textarea name="whoIntroducedToHQ" placeholder="Who introduced you to HQ?" class="input" required></textarea>
                 <div class="radio-group flex items-center">
                     <p class="mr-4">Have you received the call of God?</p>
-                    <label><input type="radio" name="callOfGod" value="Yes" required> Yes</label>
-                    <label><input type="radio" name="callOfGod" value="No" required> No</label>
+                    <label><input type="radio" name="callOfGod" value="Yes"> Yes</label>
+                    <label><input type="radio" name="callOfGod" value="No"> No</label>
                 </div>
                 <textarea name="whatCallConsistsOf" placeholder="If yes, what does it consist of?" class="input"></textarea>
                 <div class="radio-group flex items-center">
                     <p class="mr-4">Is your family aware?</p>
-                    <label><input type="radio" name="familyAwareOfCall" value="Yes" required> Yes</label>
-                    <label><input type="radio" name="familyAwareOfCall" value="No" required> No</label>
+                    <label><input type="radio" name="familyAwareOfCall" value="Yes"> Yes</label>
+                    <label><input type="radio" name="familyAwareOfCall" value="No"> No</label>
                 </div>
                 <input type="text" name="emergencyContactDeath" placeholder="Emergency Contact" class="input" required>
                 <input type="text" name="burialLocation" placeholder="Burial Location" class="input" required>
@@ -161,8 +164,8 @@
                 <textarea name="healthProblems" placeholder="Health Problems" class="input"></textarea>
                 <div class="radio-group flex items-center">
                     <p class="mr-4">Undergoing Treatment?</p>
-                    <label><input type="radio" name="underTreatment" value="Yes" required> Yes</label>
-                    <label><input type="radio" name="underTreatment" value="No" required> No</label>
+                    <label><input type="radio" name="underTreatment" value="Yes"> Yes</label>
+                    <label><input type="radio" name="underTreatment" value="No"> No</label>
                 </div>
                 <textarea name="operationsDetails" placeholder="Surgery details" class="input"></textarea>
             </div>
@@ -174,31 +177,22 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="radio-group flex items-center">
                     <p class="mr-4">Problems with anyone?</p>
-                    <label><input type="radio" name="problemsWithAnyone" value="Yes" required> Yes</label>
-                    <label><input type="radio" name="problemsWithAnyone" value="No" required> No</label>
+                    <label><input type="radio" name="problemsWithAnyone" value="Yes"> Yes</label>
+                    <label><input type="radio" name="problemsWithAnyone" value="No"> No</label>
                 </div>
                 <textarea name="reasonForProblems" placeholder="Reason for Problems" class="input"></textarea>
                 <div class="radio-group flex items-center">
                     <p class="mr-4">Been to prison?</p>
-                    <label><input type="radio" name="beenToPrison" value="Yes" required> Yes</label>
-                    <label><input type="radio" name="beenToPrison" value="No" required> No</label>
+                    <label><input type="radio" name="beenToPrison" value="Yes"> Yes</label>
+                    <label><input type="radio" name="beenToPrison" value="No"> No</label>
                 </div>
                 <textarea name="reasonForPrison" placeholder="Reason for Prison" class="input"></textarea>
             </div>
         </div>
 
-        <!-- Step 9: Documents -->
+        <!-- Step 9: Confirmation -->
         <div class="form-step">
-            <h2 class="form-section-title">9. Documents to Provide (Photocopy)</h2>
-            <div class="grid grid-cols-1 gap-4">
-                <label>Criminal Record <input type="file" name="bulletin3File" class="input" required></label>
-                <label>Medical Certificate <input type="file" name="medicalCertificateHopeClinicFile" class="input" required></label>
-                <label>Diplomas <input type="file" name="diplomasFile" multiple class="input"></label>
-                <label>Birth/Marriage Certificates <input type="file" name="birthMarriageCertificatesFile" multiple class="input" required></label>
-                <label>National ID <input type="file" name="cniFile" class="input" required></label>
-                <label>Family Commitment <input type="file" name="familyCommitmentCallFile" class="input" required></label>
-                <label>Family Agreement <input type="file" name="familyBurialAgreementFile" class="input" required></label>
-            </div>
+            <h2 class="form-section-title">9. Confirmation & Agreement</h2>
             <div class="mt-6">
                 <label><input type="checkbox" name="gdprConsent" class="mr-2" required> I accept GDPR terms.</label>
             </div>

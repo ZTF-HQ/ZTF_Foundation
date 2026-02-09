@@ -9,6 +9,7 @@ class HqStaffForm extends Model
 {
     use HasFactory;
 
+    protected $table='hq_staff_forms';
     protected $fillable = [
         'fullName', 'fathersName', 'mothersName', 'dateOfBirth', 'placeOfBirth', 'idPassportNumber',
         'fullAddress', 'phoneNumber', 'whatsappNumber', 'region', 'placeOfResidence', 'departmentOfOrigin',
@@ -23,9 +24,7 @@ class HqStaffForm extends Model
         'hqDepartment', 'originCountryCity', 'departmentResponsibility',
         'whoIntroducedToHQ', 'callOfGod', 'whatCallConsistsOf', 'familyAwareOfCall', 'emergencyContactDeath',
         'burialLocation', 'yourPossessions', 'sourcesOfIncome', 'healthProblems', 'underTreatment',
-        'operationsDetails', 'problemsWithAnyone', 'reasonForProblems', 'beenToPrison', 'reasonForPrison',
-        'bulletin3_path', 'medical_certificate_path', 'diplomas_path', 'birth_marriage_certificates_path',
-        'cni_path', 'family_commitment_path', 'family_burial_agreement_path'
+        'operationsDetails', 'problemsWithAnyone', 'reasonForProblems', 'beenToPrison', 'reasonForPrison'
     ];
 
     protected $casts = [

@@ -183,7 +183,7 @@ class SuperAdminController extends Controller
             : 0;
             
         // Activités récentes
-        $recentActivities = User::with(['Departement', 'roles'])
+        $recentActivities = User::with(['department', 'roles'])
             ->orderBy('last_activity_at', 'desc')
             ->take(10)
             ->get()

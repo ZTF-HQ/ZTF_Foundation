@@ -190,7 +190,7 @@
                 <!-- Recent Activity -->
                 <div class="activity-section">
                     <div class="section-header">
-                        <h2 class="section-title">ActivitÃ©s rÃ©centes</h2>
+                        <h2 class="section-title">Activites recentes</h2>
                         <a href="#" class="btn">Voir tout</a>
                     </div>
                     <table class="activity-table">

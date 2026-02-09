@@ -18,7 +18,7 @@
                 <h3>Intégrer un employé</h3>
                 <p class="action-desc">Ajoutez un nouveau membre au département</p>
             </a>
-            <a href="{{route('statistique')}}" class="action-card">
+            <a href="#" class="action-card">
                 <i class="fas fa-chart-line action-icon"></i>
                 <h3>Analyses RH</h3>
                 <p class="action-desc">Consultez les indicateurs du personnel</p>
