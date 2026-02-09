@@ -1,0 +1,269 @@
+ /* General Body & Typography */
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px; /* */
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: #2c3e50;
+            color: #ffffff;
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        header p {
+            font-size: 1.1em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- Department Grid Layout --- */
+        .departments-grid {
+            margin-top: 30px;
+            display: grid; 
+            grid-template-columns: 1fr; /* Default to one column for mobile */
+            gap: 25px; 
+        }
+
+        /* Adjust breakpoint and columns for larger screens */
+        @media (min-width: 769px) { /* Keep 2 columns for medium-sized tablets */
+            .departments-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 1024px) { /* Apply 3 columns on larger desktops/laptops */
+            .departments-grid {
+                grid-template-columns: 1fr 1fr 1fr; /*3 columns, equal width */
+            }
+            .container { /* Optionally increase container width for 3 columns to breathe */
+                max-width: 1200px;
+            }
+        }
+
+
+        /* Department Cards */
+        .department-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column; 
+        }
+
+        .department-header {
+            display: flex;
+            align-items: center;
+            padding: 20px 25px;
+            background-color: #34495e;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            user-select: none; /* Prevent text selection */
+            flex-shrink: 0; /* Prevents header from shrinking */
+        }
+
+        .department-header:hover {
+            background-color: #4a647e;
+        }
+
+        .department-icon {
+            font-size: 1.8em;
+            margin-right: 15px;
+            color: #ecf0f1;
+        }
+
+        .department-header h2 {
+            margin: 0;
+            font-size: 1.6em;
+            flex-grow: 1; /* Allows the title to take available space */
+        }
+
+        .toggle-icon {
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+
+        /* JavaScript Class for Active Header */
+        .department-card.active .department-header {
+            background-color: #1abc9c; /* color when active */
+        }
+
+        .department-card.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .department-content {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            background-color: #fcfcfc;
+            flex-grow: 1; /* Allows content to take remaining height in flex container */
+            display: flex; 
+            flex-direction: column; /* Stack its children */
+            justify-content: space-between; /* Pushes the "View More" button to the bottom */
+        }
+
+        /* JavaScript Class for Active Content */
+        .department-card.active .department-content {
+            max-height: 1000px; 
+            padding: 25px;
+        }
+
+        .department-content p {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        .department-content h3 {
+            color: #2c3e50;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .department-content ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 20px;
+            padding: 0;
+        }
+
+        .department-content ul li {
+            margin-bottom: 8px;
+        }
+
+        .department-image {
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .department-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- View More Button Styling --- */
+        .view-more-button {
+            display: inline-block; /* Makes it behave like a block but respects content width */
+            background-color: #1abc9c; 
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none; 
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px; 
+            margin-bottom: 0; 
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            align-self: flex-end; /* Pushes the button to the bottom right within its flex container */
+        }
+
+        .view-more-button:hover {
+            background-color: #16a085; 
+            transform: translateY(-2px);
+        }
+        
+        .msg-altern{
+            color:#007bff;
+            background-color: #ffffff;
+            text-align: center;
+            font-family:'';
+            font-size: 160%;
+            border:2px solid color:#bedbf9;
+            border-radius: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .department-header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 20px;
+            }
+
+            .department-header h2 {
+                font-size: 1.4em;
+                margin-top: 10px;
+            }
+
+            .department-icon {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .toggle-icon {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+            }
+
+            .department-content {
+                padding: 0 20px;
+            }
+
+            .department-card.active .department-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            header p {
+                font-size: 1em;
+            }
+            .department-header h2 {
+                font-size: 1.2em;
+            }
+            .department-icon {
+                font-size: 1.5em;
+            }
+            .toggle-icon {
+                font-size: 1em;
+                top: 15px;
+                right: 15px;
+            }
+            .department-content {
+                font-size: 0.95em;
+            }
+            .department-content h3 {
+                font-size: 1.1em;
+            }
+        }
