@@ -14,14 +14,14 @@
             <div style="font-size: 16px; color: #666;">Communaute Missionnaire ChrÃ©tien International</div>
         </div>
         <h1>RAPPORT DU DÃ‰PARTEMENT</h1>
-        <p>TÃ©lÃ©chargÃ© le {{ now()->format('d/m/Y Ã  H:i') }}</p>
+        <p>Obtenu  le {{ now()->format('d/m/Y Ã  H:i') }}</p>
     </div>
 
     <!-- INFORMATIONS DU DÃ‰PARTEMENT -->
     <div class="department-info">
-        <h3>Nom du DÃ©partement : {{ $department->name }}</h3>
-        <h3>Chef de dÃ©partement : {{$department->head->name}}</h3>
-        <h3>Contact du Chef de Departement : {{ $department->head->phone ?? 'Non renseignÃ©' }}</h3>
+        <h3>Nom du departement : {{ $department->name }}</h3>
+        <h3>Chef de departement : {{$department->head->name}}</h3>
+        <h3>Contact du Chef de departement : {{ $department->head->phone ?? 'Non renseignÃ©' }}</h3>
     </div>
 
     <!-- SECTION OUVRIERS -->

@@ -45,7 +45,7 @@ class DepartmentPdfController extends Controller
         ];
 
         // Générer le PDF avec options
-        $pdf = PDF::loadView('departments.pdfs.department-report', compact('department'))
+        $pdf = PDF::loadView('departments.Pdfs.department-report', compact('department'))
             ->setOptions($config);
         $pdf->setPaper('A4');
         
