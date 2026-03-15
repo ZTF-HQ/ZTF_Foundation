@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
-use storage;
 use Carbon\CarbonInterval;
-use Laravel\Passport\Passport;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
+use storage;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +25,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        //forcer les asset design de fonctionner en https
+        if($this->app->environment('production')){
+            URL::forceScheme('https');
+        }
+
         // Augmenter le temps d'exécution maximum
         set_time_limit(300);
         \Illuminate\Support\Facades\Blade::anonymousComponentPath(resource_path('views/layouts'), 'layouts');
