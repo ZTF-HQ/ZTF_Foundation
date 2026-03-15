@@ -56,3 +56,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+const hamburger = document.getElementById('hamburgerMenu');
+    const navLinks  = document.getElementById('navLinks');
+
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+
+            // change l'icône selon l'état
+            const icon = hamburger.querySelector('i');
+            if (navLinks.classList.contains('open')) {
+                icon.classList.replace('fa-bars', 'fa-times');
+            } else {
+                icon.classList.replace('fa-times', 'fa-bars');
+            }
+        });
+
+        // ferme le menu quand on clique sur un lien
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                const icon = hamburger.querySelector('i');
+                icon.classList.replace('fa-times', 'fa-bars');
+            });
+        });
+    }

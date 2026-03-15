@@ -6,6 +6,8 @@
     <title>ZTF Foundation - Home</title>
     <link rel="stylesheet" href="{{ asset('app.css') }}">
     <link rel="stylesheet" href="{{asset('authAction.css')}}">
+    <link rel="stylesheet" href="{{asset('css/homeFeatures.css')}}">
+    <link rel="stylesheet" href="{{asset('css/home-responsive.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
 </head>
@@ -142,8 +144,7 @@
         </div>
     </footer>
 
-    
-    
-    <script src="{{ asset('js/home.js') }}"></script>
+    <script src="{{ asset('js/home.js') }}" defer></script>
+    <script src="{{asset('js/homeFeatures.js')}}" defer></script>
 </body>
 </html>
