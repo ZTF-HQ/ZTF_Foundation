@@ -129,10 +129,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/departments/staff', [DepartmentController::class, 'staffIndex'])->name('departments.staff.index');
     Route::get('/departments/staff/create', [DepartmentController::class, 'staffCreate'])->name('departments.staff.create');
     Route::post('/departments/staff', [DepartmentController::class, 'staffStore'])->name('departments.staff.store');
-    Route::get('/departments/staff/{staff}', [DepartmentController::class, 'staffShow'])->name('staff.show');
-    Route::get('/departments/staff/{staff}/edit', [DepartmentController::class, 'staffEdit'])->name('staff.edit');
-    Route::put('/departments/staff/{staff}', [DepartmentController::class, 'staffUpdate'])->name('staff.update');
-    Route::delete('/departments/staff/{staff}', [DepartmentController::class, 'staffDestroy'])->name('staff.destroy');
+    Route::get('/departments/staff/{staff}', [DepartmentController::class, 'staffShow'])->name('departments.staff.show');
+    Route::get('/departments/staff/{staff}/edit', [DepartmentController::class, 'staffEdit'])->name('departments.staff.edit');
+    Route::put('/departments/staff/{staff}', [DepartmentController::class, 'staffUpdate'])->name('departments.staff.update');
+    Route::delete('/departments/staff/{staff}', [DepartmentController::class, 'staffDestroy'])->name('departments.staff.destroy');
 
     //============================================
     // ROUTES DE PARAMÈTRES DE DÉPARTEMENT

@@ -449,7 +449,7 @@ class DepartmentController extends Controller
 
             DB::commit();
             
-            return redirect()->route('staff.show', $staff)
+            return redirect()->route('departments.staff.show', $staff)
                 ->with('success', "Les informations de {$staff->name} ont été mises à jour avec succès.");
 
         } catch (\Exception $e) {
