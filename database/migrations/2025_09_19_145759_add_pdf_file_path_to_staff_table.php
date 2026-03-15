@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('staff', function (Blueprint $table) {
+        Schema::table('hq_staff_forms', function (Blueprint $table) {
             $table->string('pdf_file_path')->nullable()->after('is_active');
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('staff', function (Blueprint $table) {
+        Schema::table('hq_staff_forms', function (Blueprint $table) {
             $table->dropColumn('pdf_file_path');
         });
     }

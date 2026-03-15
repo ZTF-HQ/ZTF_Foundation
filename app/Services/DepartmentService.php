@@ -62,6 +62,9 @@ class DepartmentService
                 $user->roles()->attach($role->id);
             }
 
+            // ✅ Assigner le département à l'utilisateur
+            $user->update(['department_id' => $department->id]);
+
             DB::commit();
             return true;
         } catch (Exception $e) {

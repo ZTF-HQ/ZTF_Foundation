@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use PDF;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use PDF;
 
 class DepartmentPdfController extends Controller
 {
@@ -35,9 +36,9 @@ class DepartmentPdfController extends Controller
         $config = [
             'defaultFont' => 'sans-serif',
             'isHtml5ParserEnabled' => true,
-            'isPhpEnabled' => true,
+            'isPhpEnabled' => false,
             'isRemoteEnabled' => true,
-            'dpi' => 150,
+            'dpi' => 96,
             'fontCache' => storage_path('fonts'),
             'tempDir' => storage_path('app/pdf-temp'),
             'chroot' => public_path(),
@@ -52,26 +53,28 @@ class DepartmentPdfController extends Controller
         $date = now();
         $filename = 'Liste_Des_Ouvriers_par_Service_' . 
             $department->code . '_Telecharger_le_' . 
-            $date->format('Y m d') . '_A_' . 
-            sprintf('%02d:%02d:%02d', $date->hour, $date->minute, $date->second) . '.pdf';
+            $date->format('Y_m_d') . '_A_' . 
+            $date->format('H:i:s') . '.pdf';
         
         // Générer le contenu du PDF
         $pdfContent = $pdf->output();
         
-        // Définir le chemin de stockage
-        $path = 'pdfs/departments/' . $department->id . '/' . $filename . $department->name;
-        
-        // Sauvegarder directement via le système de stockage de Laravel
-        Storage::disk('public')->put($path, $pdfContent);
-        
-        // URL publique du PDF
-        $url = Storage::disk('public')->url($path);
+        //Assainir le nom du department pour le chemin du fichier
+        $safeName = Str::slug($department->name);
 
-        // Enregistrer l'historique du PDF dans la base de données si nécessaire
-        // ...
+        // chemin du fichier
+        $path = 'pdfs/department/'. $department->id.'/'.$safeName.'/'.$filename;
 
-        // Télécharger le PDF
-        return $pdf->download($filename);
+        //
+
+        Storage::disk('public')->put($path,$pdfContent);
+
+        return response($pdfContent, 200,[
+        'Content-Type'=>'application/pdf',
+        'Content-Disposition'=>'attachement; filename="' . $filename . '"',
+        'Content-Lenght'=>strlen($pdfContent),
+        ]);
+        
     }
 
     public function getPdfHistory()

@@ -18,13 +18,18 @@ class DepartmentController extends Controller
         $user = Auth::user();
         
         if ($user->isAdmin2()) {
+            
             // Pour les chefs de département, montrer uniquement leurs données
             $department = Department::with(['services' => function($query) {
                 $query->withCount('users');
             }])->find($user->department_id);
+            if(!$department){
+                abort(404,'Le departement n\'existe ou pas ete assigne');
+            }
+
             
             $departmentUsers = User::where('department_id', $user->department_id)->count();
-            $departmentServices = $department->services()->count();
+            $departmentServices = $department?->services->count() ?? null;
             $recentActivities = User::with(['services'])
                                    ->where('department_id', $user->department_id)
                                    ->orderBy('last_activity_at', 'desc')
