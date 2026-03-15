@@ -69,17 +69,18 @@ Route::delete('/user/{id}/delete', [UserController::class, 'deleteUser'])->name(
 //============================================
 
 Route::middleware('auth')->group(function () {
-    Route::post('/roles/store',[RoleController::class,'store'])->name('roles.store');
+    // Routes pour les Rôles
     Route::resource('roles', RoleController::class)->names([
         'index' => 'roles.index',
         'create' => 'roles.create',
+        'store' => 'roles.store',
         'show' => 'roles.show',
         'edit' => 'roles.edit',
         'update' => 'roles.update',
         'destroy' => 'roles.destroy',
     ]);
 
-    Route::post('permissions/store',[PermissionController::class,'store'])->name('permissions.store');
+    // Routes pour les Permissions
     Route::resource('permissions', PermissionController::class)->names([
         'index' => 'permissions.index',
         'create' => 'permissions.create',
