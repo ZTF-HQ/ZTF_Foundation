@@ -24,7 +24,7 @@
     <header class="hero">
         <nav class="navbar">
             <div class="logo">
-                <img src="{{ asset('images/ztf/logo.png') }}" alt="ZTF Foundation Logo" class="logo-img">
+                <img src="{{ asset('images/CMFI Logo.png') }}" alt="ZTF Foundation Logo" class="logo-img">
                 <span class="logo-text">ZTF Foundation</span>
             </div>
             <div class="nav-links">
