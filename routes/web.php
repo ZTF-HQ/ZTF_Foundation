@@ -260,8 +260,8 @@ Route::middleware('auth')->group(function () {
     // ROUTES D'AUTHENTIFICATION - AUTRES
     //============================================
 
-    Route::post('/auth/login',[LoginController::class,'login'])->name('staff.store');
-    Route::post('departments/Save-Depts',[LoginController::class,'saveDepts'])->name('departments.saveDepts');
+    Route::post('/auth/login', [LoginController::class, 'login'])->name('auth.login');
+    Route::post('departments/Save-Depts', [LoginController::class, 'saveDepts'])->name('departments.saveDepts');
 
     //============================================
     // ROUTES DE SERVICES (AVEC CONTRÔLE D'ACCÈS)
