@@ -15,6 +15,31 @@ body {
     background-attachment: fixed;
 }
 
+/* Background responsif pour tablette et mobile */
+@media (max-width: 1024px) {
+    body {
+        background-image: url('https://placehold.co/768x1024/e0e7ff/6366f1?text=ZTF+Foundation');
+        background-size: cover;
+        background-attachment: scroll;
+    }
+}
+
+@media (max-width: 767px) {
+    body {
+        background-image: url('https://placehold.co/480x800/e0e7ff/6366f1?text=ZTF+Foundation');
+        background-size: cover;
+        background-attachment: scroll;
+    }
+}
+
+@media (max-width: 479px) {
+    body {
+        background-image: url('https://placehold.co/360x640/e0e7ff/6366f1?text=ZTF');
+        background-size: cover;
+        background-attachment: scroll;
+    }
+}
+
 .container {
     background-color: rgba(255, 255, 255, 0.95);
     padding: 2.5rem;
@@ -96,3 +121,235 @@ body {
 
 .radio-group label { display: inline-flex; align-items: center; margin-right: 1rem; cursor: pointer; }
 .radio-group input[type="radio"] { margin-right: 0.5rem; }
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Progress bar container optimization */
+.flex.items-center.justify-between.mb-8 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.flex.items-center.justify-between.mb-8 > div {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.flex.items-center.justify-between.mb-8 .progress-line {
+    min-width: 0;
+}
+
+/* Tablette (768px - 1024px) */
+@media (max-width: 1024px) {
+    body {
+        padding: 1.5rem;
+    }
+
+    .container {
+        padding: 2rem;
+        max-width: 100%;
+    }
+
+    .form-section-title {
+        font-size: 1.15rem;
+        margin-bottom: 0.85rem;
+    }
+
+    .input {
+        padding: 0.5rem 0.875rem;
+        font-size: 15px;
+    }
+
+    .progress-step {
+        width: 1.75rem;
+        height: 1.75rem;
+        font-size: 0.875rem;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+
+    .radio-group label {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Mobile (480px - 767px) */
+@media (max-width: 767px) {
+    body {
+        padding: 1rem;
+        min-height: auto;
+    }
+
+    .text-center {
+        padding: 1rem 0;
+    }
+
+    .text-center h1 {
+        font-size: 1.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .text-center h2 {
+        font-size: 1.1rem !important;
+    }
+
+    .container {
+        padding: 1.5rem 1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .form-section-title {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .input {
+        padding: 0.5rem 0.75rem;
+        font-size: 14px;
+        border-radius: 0.375rem;
+    }
+
+    .input:focus {
+        box-shadow: 0 0 0 1px rgba(59,130,246,0.3);
+    }
+
+    /* Progress bar responsive */
+    .flex.items-center.justify-between {
+        gap: 0.25rem !important;
+    }
+
+    .flex.items-center.justify-between.mb-8 {
+        margin-bottom: 1.5rem;
+    }
+
+    .progress-step {
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .progress-line {
+        height: 0.2rem;
+        margin: 0 0.125rem;
+        flex-grow: 1;
+    }
+
+    /* Grid responsif - 1 colonne sur mobile */
+    .grid.grid-cols-1.md\:grid-cols-2 {
+        gap: 0.875rem !important;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        align-items: flex-start !important;
+        width: 100%;
+    }
+
+    .radio-group p {
+        margin-bottom: 0.5rem;
+        margin-right: 0 !important;
+        width: 100%;
+    }
+
+    .radio-group label {
+        margin-right: 1rem;
+        margin-bottom: 0.4rem;
+    }
+
+    /* Boutons responsifs */
+    .flex.justify-between.mt-8 {
+        flex-direction: column;
+        gap: 0.75rem !important;
+    }
+
+    button, .btn-primary, .btn-secondary {
+        width: 100%;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9rem;
+    }
+
+    #prevBtn, #nextBtn, #submitBtn {
+        width: 100%;
+    }
+
+    .space-y-8 {
+        gap: 1.5rem !important;
+    }
+}
+
+/* Très petits mobiles (< 480px) */
+@media (max-width: 479px) {
+    body {
+        padding: 0.75rem;
+    }
+
+    .text-center {
+        margin-bottom: 0.5rem;
+    }
+
+    .text-center h1 {
+        font-size: 1.25rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+
+    .text-center h2 {
+        font-size: 0.95rem !important;
+    }
+
+    .text-center p {
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem !important;
+    }
+
+    .container {
+        padding: 1rem;
+    }
+
+    .form-section-title {
+        font-size: 0.95rem;
+        margin-bottom: 0.65rem;
+    }
+
+    .input {
+        padding: 0.45rem 0.65rem;
+        font-size: 13px;
+    }
+
+    .progress-step {
+        width: 1.35rem;
+        height: 1.35rem;
+        font-size: 0.65rem;
+        flex-shrink: 0;
+    }
+
+    .progress-line {
+        height: 0.15rem;
+        margin: 0 0.1rem;
+        flex-grow: 1;
+        min-width: 2px;
+    }
+
+    .flex.items-center.justify-between.mb-8 {
+        margin-bottom: 1.25rem;
+        gap: 0.15rem !important;
+    }
+
+    textarea.input {
+        min-height: 60px;
+        resize: vertical;
+    }
+
+    .error-message {
+        font-size: 0.75rem;
+    }
+}

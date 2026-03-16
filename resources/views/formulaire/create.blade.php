@@ -14,8 +14,8 @@
 <body>
 
 <div class="text-center mb-8">
-    <h1 class="text-4xl font-extrabold text-gray-900 mb-2">ZACHARIAS TANNEE FOMUN FOUNDATION</h1>
-    <h2 class="text-2xl font-bold text-indigo-700">HEADQUARTERS STAFF INFORMATION FORM</h2>
+    <h1 class="text-4xl font-extrabold text-gray-900 mb-2" style="font-size: clamp(1.5rem, 5vw, 2.25rem);">ZACHARIAS TANNEE FOMUN FOUNDATION</h1>
+    <h2 class="text-2xl font-bold text-indigo-700" style="font-size: clamp(1.1rem, 4vw, 1.875rem);">HEADQUARTERS STAFF INFORMATION FORM</h2>
 </div>
 
 <div class="container">
@@ -31,16 +31,42 @@
     </div>
 
     <!-- Progress bar -->
-    <div class="flex items-center justify-between mb-8 text-xs sm:text-sm">
-        <div class="flex items-center"><div class="progress-step active-step">1</div><div class="progress-line"></div></div>
-        <div class="flex items-center"><div class="progress-step">2</div><div class="progress-line"></div></div>
-        <div class="flex items-center"><div class="progress-step">3</div><div class="progress-line"></div></div>
-        <div class="flex items-center"><div class="progress-step">4</div><div class="progress-line"></div></div>
-        <div class="flex items-center"><div class="progress-step">5</div><div class="progress-line"></div></div>
-        <div class="flex items-center"><div class="progress-step">6</div><div class="progress-line"></div></div>
-        <div class="flex items-center"><div class="progress-step">7</div><div class="progress-line"></div></div>
-        <div class="flex items-center"><div class="progress-step">8</div><div class="progress-line"></div></div>
-        <div class="flex items-center"><div class="progress-step">9</div></div>
+    <div class="flex items-center justify-between mb-8 text-xs sm:text-sm" style="gap: 0.25rem;">
+        <div class="flex items-center" style="flex: 1; gap: 0.25rem;">
+            <div class="progress-step active-step">1</div>
+            <div class="progress-line" style="flex: 1; height: 0.25rem;"></div>
+        </div>
+        <div class="flex items-center" style="flex: 1; gap: 0.25rem;">
+            <div class="progress-step">2</div>
+            <div class="progress-line" style="flex: 1; height: 0.25rem;"></div>
+        </div>
+        <div class="flex items-center" style="flex: 1; gap: 0.25rem;">
+            <div class="progress-step">3</div>
+            <div class="progress-line" style="flex: 1; height: 0.25rem;"></div>
+        </div>
+        <div class="flex items-center" style="flex: 1; gap: 0.25rem;">
+            <div class="progress-step">4</div>
+            <div class="progress-line" style="flex: 1; height: 0.25rem;"></div>
+        </div>
+        <div class="flex items-center" style="flex: 1; gap: 0.25rem;">
+            <div class="progress-step">5</div>
+            <div class="progress-line" style="flex: 1; height: 0.25rem;"></div>
+        </div>
+        <div class="flex items-center" style="flex: 1; gap: 0.25rem;">
+            <div class="progress-step">6</div>
+            <div class="progress-line" style="flex: 1; height: 0.25rem;"></div>
+        </div>
+        <div class="flex items-center" style="flex: 1; gap: 0.25rem;">
+            <div class="progress-step">7</div>
+            <div class="progress-line" style="flex: 1; height: 0.25rem;"></div>
+        </div>
+        <div class="flex items-center" style="flex: 1; gap: 0.25rem;">
+            <div class="progress-step">8</div>
+            <div class="progress-line" style="flex: 1; height: 0.25rem;"></div>
+        </div>
+        <div class="flex items-center" style="flex: 1; gap: 0.25rem;">
+            <div class="progress-step">9</div>
+        </div>
     </div>
 
     <!-- Formulaire multi-Ã©tapes -->
