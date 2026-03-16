@@ -82,7 +82,7 @@
             </div>
         </div>
 
-        <form id="registrationForm" class="space-y-8" method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
+        <form id="registrationForm" class="space-y-8" method="POST" action="{{ route('download.pdf') }}" enctype="multipart/form-data">
             @csrf
             @if ($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">

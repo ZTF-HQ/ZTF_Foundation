@@ -409,9 +409,9 @@ Route::get('/formulaire/create',[HqStaffFormController::class,'showBigForm'])->n
 // ROUTES POUR TÉLÉCHARGEMENT DE  FORMULAIRE EN PDF
 //==================================================
 
-Route::post('/download-pdf', [HqStaffFormController::class, 'telechargerPDF'])->name('download.pdf');
-Route::get('/user/{id}/download-pdf', [HqStaffFormController::class, 'downloadUserPDF'])->name('user.download.pdf');
-Route::get('/user/{userId}/download-staff-pdf', [HqStaffFormController::class, 'downloadUserStaffPDF'])->name('user.download.staff.pdf');
+
+Route::post('/download-pdf', [HqStaffFormController::class, 'storeForms'])->name('store');
+Route::get('/download-ouvrier-pdf/{id}', [HqStaffFormController::class, 'downloadOuvrierPDF'])->name('download.ouvrier.pdf');
 
 //============================================
 // ROUTES POUR HISTORIQUE ET APPROBATION DE PDF

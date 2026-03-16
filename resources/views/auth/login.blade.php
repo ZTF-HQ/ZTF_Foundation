@@ -15,8 +15,8 @@
 <body>
     <div class="login-container">
         <div class="login-card">
-            <h1>ZTF Foundation Login</h1>
-            <p>Connectez-vous Ã  votre compte</p>
+            <h1>ZTF Foundation - Connexion</h1>
+            <p>Connectez-vous a votre compte</p>
 
             @if(session('success'))
                 <div class="alert alert-success">
@@ -58,7 +58,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
-                    Retour Ã  l'accueil
+                    Retour a  l'accueil
                 </a>
             </div>
         </div>

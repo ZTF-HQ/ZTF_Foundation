@@ -42,12 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', function(e) {
             if (!validateStep(currentStep)) {
                 e.preventDefault();
-            } else {
-                // Show all steps before submission to ensure all data is sent
-                document.querySelectorAll('.form-step').forEach(step => {
-                    step.style.display = 'block';
-                });
             }
+            // Permettre la soumission naturelle du formulaire
         });
     }
 

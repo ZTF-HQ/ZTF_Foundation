@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Storage;
+
 use App\Models\HqStaffForm;
-use App\Models\PdfDownloadHistory;
-use App\Models\StaffUser;
-use App\Models\FirstRegistrationUser;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class HqStaffFormController extends Controller
 {
@@ -25,248 +20,31 @@ class HqStaffFormController extends Controller
     }
 
     /**
-     * Affiche l'historique des téléchargements
+     * Télécharge le PDF du formulaire de l'ouvrier
      */
-    public function downloadHistory()
+    public function downloadOuvrierPDF($id)
     {
         try {
-            // Récupérer l'historique des PDF générés
-            $pdfHistories = PdfDownloadHistory::with('staffForm')
-                ->orderBy('generated_at', 'desc')
-                ->paginate(15);
-
-            return view('formulaire.download-history', compact('pdfHistories'));
-        } catch (Exception $e) {
-            Log::error('Erreur lors de la récupération de l\'historique: ' . $e->getMessage());
-            return back()->with('error', 'Une erreur est survenue lors du chargement de l\'historique.');
-        }
-    }
-
-    /**
-     * Télécharge un PDF depuis l'historique
-     */
-    public function redownloadPDF($historyId)
-    {
-        try {
-            // Récupérer l'enregistrement de l'historique
-            $history = PdfDownloadHistory::findOrFail($historyId);
-
-            // Vérifier que le fichier existe
-            if (!Storage::exists($history->pdf_path)) {
-                Log::error('Fichier PDF non trouvé: ' . $history->pdf_path);
-                return back()->with('error', 'Le fichier PDF n\'a pas pu être trouvé.');
-            }
-
-            // Incrémenter le compteur de téléchargement
-            $history->incrementDownloadCount();
-
-            // Télécharger le fichier
-            return Storage::download($history->pdf_path, $history->pdf_filename);
-
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return back()->with('error', 'Cet enregistrement d\'historique n\'a pas été trouvé.');
-        } catch (Exception $e) {
-            Log::error('Erreur lors du téléchargement du PDF: ' . $e->getMessage());
-            return back()->with('error', 'Une erreur est survenue lors du téléchargement du PDF.');
-        }
-    }
-
-    /**
-     * Télécharge un PDF pour un utilisateur enregistré (avec vérification)
-     */
-    public function downloadUserStaffPDF($userId)
-    {
-        try {
-            // Récupérer l'utilisateur enregistré via FirstRegistrationUser
-            $user = FirstRegistrationUser::findOrFail($userId);
-
-            // Récupérer le lien approuvé avec un PDF Staff
-            $staffUserLink = StaffUser::where('user_id', $userId)
-                ->where('status', 'approved')
-                ->with('staff')
-                ->firstOrFail();
-
-            // Récupérer le PDF Staff lié
-            $staff = $staffUserLink->staff;
-
-            if (!$staff) {
-                return back()->with('error', 'Le PDF Staff n\'a pas pu être trouvé.');
-            }
-
-            // Génération du PDF
-            $pdf = PDF::loadView('formulaire.pdf', $staff->toArray())
-                ->setPaper('a4', 'portrait')
-                ->setOptions([
-                    'defaultFont' => 'DejaVu Sans',
-                    'isHtml5ParserEnabled' => true,
-                    'isRemoteEnabled' => true,
-                    'isFontSubsettingEnabled' => true,
-                    'dpi' => 300,
-                    'defaultPaperSize' => 'a4',
-                    'margin_left' => 20,
-                    'margin_right' => 20,
-                    'margin_top' => 20,
-                    'margin_bottom' => 20,
-                    'enable_php' => false,
-                    'enable_javascript' => true,
-                ]);
-
-            // Génération du nom de fichier et du chemin
-            $filename = 'staff_form_user_' . $userId . '_' . now()->format('Y-m-d_His') . '.pdf';
-            $filepath = 'pdfs/staff_forms/' . $filename;
-
-            // Stockage du PDF
-            Storage::put('public/' . $filepath, $pdf->output());
-
-            // Enregistrement dans l'historique
-            PdfDownloadHistory::create([
-                'hq_staff_form_id' => $staff->id,
-                'pdf_filename' => $filename,
-                'pdf_path' => $filepath,
-                'file_size' => strlen($pdf->output()),
-                'generated_by' => $user->first_name ?? 'User',
-                'generated_at' => now(),
-            ]);
-
-            // Incrémenter le compteur de téléchargement
-            $history = PdfDownloadHistory::where('pdf_path', $filepath)->first();
-            if ($history) {
-                $history->incrementDownloadCount();
-            }
-
-            // Téléchargement du PDF
-            return $pdf->download($filename);
-
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return back()->with('error', 'Cet utilisateur ou ce PDF n\'a pas été trouvé ou n\'est pas approuvé.');
-        } catch (Exception $e) {
-            Log::error('Erreur lors de la génération du PDF pour utilisateur: ' . $e->getMessage());
-            return back()->with('error', 'Une erreur est survenue lors de la génération du PDF.');
-        }
-    }
-
-    /**
-     * Approuver un lien utilisateur -> PDF Staff
-     */
-    public function approvePDFLink($staffUserId)
-    {
-        try {
-            $staffUserLink = StaffUser::findOrFail($staffUserId);
-            $staffUserLink->approve('Approuvé par le système');
-
-            return back()->with('success', 'Le lien utilisateur-PDF a été approuvé. L\'utilisateur peut maintenant télécharger son PDF.');
-        } catch (Exception $e) {
-            Log::error('Erreur lors de l\'approbation du lien: ' . $e->getMessage());
-            return back()->with('error', 'Une erreur est survenue lors de l\'approbation.');
-        }
-    }
-
-    /**
-     * Rejeter un lien utilisateur -> PDF Staff
-     */
-    public function rejectPDFLink($staffUserId, Request $request)
-    {
-        try {
-            $staffUserLink = StaffUser::findOrFail($staffUserId);
-            $notes = $request->input('reason', 'Rejeté par le système');
-            $staffUserLink->reject($notes);
-
-            return back()->with('success', 'Le lien utilisateur-PDF a été rejeté.');
-        } catch (Exception $e) {
-            Log::error('Erreur lors du rejet du lien: ' . $e->getMessage());
-            return back()->with('error', 'Une erreur est survenue lors du rejet.');
-        }
-    }
-
-    /**
-     * Affiche la liste des PDFs en attente d'approbation
-     */
-    public function pendingApprovals()
-    {
-        try {
-            $pendingLinks = StaffUser::where('status', 'pending')
-                ->with(['user', 'staff'])
-                ->orderBy('created_at', 'desc')
-                ->paginate(15);
-
-            return view('formulaire.pending-approvals', compact('pendingLinks'));
-        } catch (Exception $e) {
-            Log::error('Erreur lors de la récupération des approbations en attente: ' . $e->getMessage());
-            return back()->with('error', 'Une erreur est survenue.');
-        }
-    }
-
-    /**
-     * Télécharge le PDF d'un utilisateur spécifique
-     */
-    public function downloadUserPDF($id)
-    {
-        try {
-            // Récupérer les données du formulaire pour l'utilisateur spécifique
-            $staffForm = HqStaffForm::where('user_id', $id)->firstOrFail();
-
-            // Génération du PDF
-            $pdf = PDF::loadView('formulaire.pdf', $staffForm->toArray())
-                ->setPaper('a4', 'portrait')
-                ->setOptions([
-                    'defaultFont' => 'DejaVu Sans',
-                    'isHtml5ParserEnabled' => true,
-                    'isRemoteEnabled' => true,
-                    'isFontSubsettingEnabled' => true,
-                    'dpi' => 300,
-                    'defaultPaperSize' => 'a4',
-                    'margin_left' => 20,
-                    'margin_right' => 20,
-                    'margin_top' => 20,
-                    'margin_bottom' => 20,
-                    'enable_php' => false,
-                    'enable_javascript' => true,
-                ]);
-
-            // Génération du nom de fichier et du chemin
-            $filename = 'staff_form_' . $id . '_' . now()->format('Y-m-d_His') . '.pdf';
-            $filepath = 'pdfs/staff_forms/' . $filename;
-
-            // Stockage du PDF
-            Storage::put('public/' . $filepath, $pdf->output());
-
-            // Enregistrement dans l'historique
-            $history = PdfDownloadHistory::create([
-                'hq_staff_form_id' => $staffForm->id,
-                'pdf_filename' => $filename,
-                'pdf_path' => $filepath,
-                'file_size' => strlen($pdf->output()),
-                'generated_by' => Auth::user()->name ?? 'System',
-                'generated_at' => now(),
-            ]);
-
-            // Incrémenter le compteur de téléchargement
-            $history->incrementDownloadCount();
-
-            // Téléchargement du PDF
-            return $pdf->download($filename);
-
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return back()->with('error', 'Le formulaire de cet utilisateur n\'a pas été trouvé.');
-        } catch (Exception $e) {
-            Log::error('Erreur lors de la génération du PDF: ' . $e->getMessage());
-            return back()->with('error', 'Une erreur est survenue lors de la génération du PDF.');
-        }
-    }
-
-    /**
-     * Télécharge le PDF du formulaire
-     */
-    public function telechargerPDF(Request $request)
-    {
-        try {
-            // DEBUG: Voir toutes les données reçues
-            \Log::info('Données reçues du formulaire:', $request->all());
+            $ouvrier = HqStaffForm::findOrFail($id);
             
-            // Validation des données
-            $validated = $request->validate([
-                // Section 1 : Personal Information
-                'fullName' => 'required|string|max:255',
+            $pdf = Pdf::loadView('formulaire.pdf', compact('ouvrier'));
+            
+            $filename = 'QG_Ouvrier_N°' . $ouvrier->id . '.pdf';
+            
+            return $pdf->download($filename);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erreur lors du téléchargement du PDF');
+        }
+    }
+
+
+
+    public function storeForms(Request $request)
+{
+        $validated = $request->validate([
+
+                //Section 1 : Informations personnelles
+                'fullName'     => 'required|string|max:255',
                 'fathersName' => 'nullable|string|max:255',
                 'mothersName' => 'nullable|string|max:255',
                 'dateOfBirth' => 'required|date',
@@ -325,9 +103,9 @@ class HqStaffFormController extends Controller
 
                 // Section 6 : Commissioning
                 'whoIntroducedToHQ' => 'required|string|max:500',
-                'callOfGod' => 'required|in:Yes,No',
+                'callOfGod' => 'nullable|in:Yes,No',
                 'whatCallConsistsOf' => 'nullable|string|max:1000',
-                'familyAwareOfCall' => 'required|in:Yes,No',
+                'familyAwareOfCall' => 'nullable|in:Yes,No',
                 'emergencyContactDeath' => 'required|string|max:500',
                 'burialLocation' => 'required|string|max:500',
 
@@ -335,85 +113,43 @@ class HqStaffFormController extends Controller
                 'yourPossessions' => 'nullable|string|max:1000',
                 'sourcesOfIncome' => 'required|string|max:500',
                 'healthProblems' => 'nullable|string|max:1000',
-                'underTreatment' => 'required|in:Yes,No',
+                'underTreatment' => 'nullable|in:Yes,No',
                 'operationsDetails' => 'nullable|string|max:1000',
 
                 // Section 8 : Judicial History
-                'problemsWithAnyone' => 'required|in:Yes,No',
+                'problemsWithAnyone' => 'nullable|in:Yes,No',
                 'reasonForProblems' => 'nullable|string|max:1000',
-                'beenToPrison' => 'required|in:Yes,No',
+                'beenToPrison' => 'nullable|in:Yes,No',
                 'reasonForPrison' => 'nullable|string|max:1000',
+            'gdprConsent'  => 'required'
+        ]);
 
-                
-                // Consentement RGPD
-                'gdprConsent' => 'required|accepted'
+        try {
+            $ouvrier = HqStaffForm::create($validated);
+
+            $pdf = Pdf::loadView('formulaire.pdf', compact('ouvrier'));
+
+            $path = 'forms/QG_Ouvrier_N°'.$ouvrier->id.'.pdf';
+
+            // Créer le dossier s'il n'existe pas
+            Storage::disk('public')->makeDirectory('forms', 0755, true);
+
+            // Sauvegarder le PDF
+            Storage::disk('public')->put($path, $pdf->output());
+
+            // Rediriger vers home avec les données
+            return redirect()->route('home')->with([
+                'registration_success' => true,
+                'pdf_path' => $path,
+                'ouvrier_id' => $ouvrier->id,
+                'ouvrier_name' => $ouvrier->fullName
             ]);
-
-
-            
-
-            // Sauvegarde en base de données
-            $staffForm = HqStaffForm::create($validated);
-            
-            // Vérifier que la création en BD a réussi
-            if (!$staffForm) {
-                Log::error('Erreur lors de la sauvegarde du formulaire en BD');
-                return back()->with('error', 'Erreur lors de la sauvegarde du formulaire. Veuillez réessayer.');
-            } else {
-                // Try imbriqué pour la génération et téléchargement du PDF
-                try {
-                    // Génération du PDF - passer les données directement comme array
-                    $pdf = PDF::loadView('formulaire.pdf', $validated)
-                        ->setPaper('a4', 'portrait')
-                        ->setOptions([
-                            'defaultFont' => 'DejaVu Sans',
-                            'isHtml5ParserEnabled' => true,
-                            'isRemoteEnabled' => true,
-                            'isFontSubsettingEnabled' => true,
-                            'dpi' => 300,
-                            'defaultPaperSize' => 'a4',
-                            'margin_left' => 20,
-                            'margin_right' => 20,
-                            'margin_top' => 20,
-                            'margin_bottom' => 20,
-                            'enable_php' => false,
-                            'enable_javascript' => true,
-                        ]);
-
-                    // Génération du nom de fichier et du chemin
-                    $filename = 'staff_form_' . $staffForm->id . '_' . ($validated['fullName'] ?? 'unknown') . '_' . now()->format('Y-m-d_His') . '.pdf';
-                    $filepath = 'pdfs/staff_forms/' . $filename;
-
-                    // Générer le contenu du PDF UNE SEULE FOIS
-                    $pdfContent = $pdf->output();
-                    
-                    // Stockage du PDF
-                    Storage::put('public/' . $filepath, $pdfContent);
-
-                    // Enregistrement dans l'historique
-                    PdfDownloadHistory::create([
-                        'hq_staff_form_id' => $staffForm->id,
-                        'pdf_filename' => $filename,
-                        'pdf_path' => $filepath,
-                        'file_size' => strlen($pdfContent),
-                        'generated_by' => $validated['fullName'] ?? 'System',
-                        'generated_at' => now(),
-                    ]);
-
-                    // Téléchargement du PDF
-                    return response()->download(storage_path('app/public/' . $filepath), $filename);
-                    
-                } catch (Exception $e) {
-                    // Gérer les erreurs spécifiques à la génération PDF
-                    Log::error('Erreur lors de la génération du PDF: ' . $e->getMessage());
-                    return back()->with('error', 'Une erreur est survenue lors de la génération du PDF. Veuillez réessayer.');
-                }
-            }
-
-        } catch (Exception $e) {
-            // Gérer les erreurs générales (validation, sauvegarde BD)
-            Log::error('Erreur générale lors du traitement du formulaire: ' . $e->getMessage());
-            return back()->with('error', 'Une erreur est survenue. Veuillez réessayer.');
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de l\'enregistrement du formulaire', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back()->with('error', 'Erreur lors de l\'enregistrement: ' . $e->getMessage())->withInput();
         }
-    }
+}
 }

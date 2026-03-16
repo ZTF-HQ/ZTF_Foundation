@@ -21,6 +21,15 @@
 <div class="container">
     <p class="text-gray-600 text-center mb-8">Please fill in the information to register.</p>
 
+    <!-- Message de succès -->
+    <div id="successMessage" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">
+        <strong class="font-bold">Succès!</strong>
+        <span class="block sm:inline">Ouvrier enregistre avec succes</span>
+        <span class="absolute top-0 bottom-0 right-0 px-4 py-3 cursor-pointer" onclick="document.getElementById('successMessage').classList.add('hidden')">
+            <svg class="fill-current h-6 w-6" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+        </span>
+    </div>
+
     <!-- Progress bar -->
     <div class="flex items-center justify-between mb-8 text-xs sm:text-sm">
         <div class="flex items-center"><div class="progress-step active-step">1</div><div class="progress-line"></div></div>
@@ -35,7 +44,7 @@
     </div>
 
     <!-- Formulaire multi-Ã©tapes -->
-    <form id="registrationForm" class="space-y-8" method="POST" action="{{ route('download.pdf') }}" enctype="multipart/form-data">
+    <form id="registrationForm" class="space-y-8" method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
         @csrf
 
         <!-- Step 1: Personal Information -->
@@ -202,7 +211,7 @@
         <div class="flex justify-between mt-8">
             <button type="button" id="prevBtn" class="bg-gray-300 text-gray-800 px-6 py-2 rounded hover:bg-gray-400 transition">Previous</button>
             <button type="button" id="nextBtn" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Next</button>
-            <button type="submit" id="submitBtn" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition" style="display:none;">Download PDF</button>
+            <button type="submit" id="submitBtn" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition" style="display:none;">Soumettre vos informations</button>
         </div>
     </form>
 </div>
@@ -210,6 +219,48 @@
 
 
     <script src="{{ asset('js/create.js') }}"></script>
+
+    <script>
+        // Vérifier s'il y a un message flash de succès
+        @if(session('success'))
+            document.addEventListener('DOMContentLoaded', function() {
+                const successMessage = document.getElementById('successMessage');
+                if (successMessage) {
+                    successMessage.classList.remove('hidden');
+                    
+                    // Masquer le message automatiquement après 5 secondes
+                    setTimeout(function() {
+                        successMessage.classList.add('hidden');
+                    }, 5000);
+                }
+            });
+        @endif
+
+        // Détecter la soumission du formulaire et afficher le message
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            // Marquer que le formulaire est en cours de soumission
+            localStorage.setItem('formSubmitting', 'true');
+        });
+
+        // Vérifier à chaque chargement de page si le formulaire était en cours de soumission
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('formSubmitting') === 'true' && @json(session('success') ? true : false)) {
+                localStorage.removeItem('formSubmitting');
+                const successMessage = document.getElementById('successMessage');
+                if (successMessage) {
+                    successMessage.classList.remove('hidden');
+                    
+                    // Scroll vers le message
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Masquer après 6 secondes
+                    setTimeout(function() {
+                        successMessage.classList.add('hidden');
+                    }, 6000);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
 
